@@ -99,6 +99,18 @@ void GridList::CheckerSwap(GridList& otherlist)
 void GridList::CheckerN()
 {
   // enter your code here
+  GridNode* currNode = northwest;
+  for (int i = 0; i < dimy; i++) {
+    for (int j = 0; j < dimx; j++) {
+      if (i % 2 == 0) {
+        if (j % 2 == 1) currNode->data.Negative();
+      }
+      else {
+        if (j % 2 == 0) currNode->data.Negative();
+      }
+      currNode = currNode->next;
+    }
+  }
 }
 
 // Deallocates any dynamic memory associated with this list
