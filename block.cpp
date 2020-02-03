@@ -58,5 +58,5 @@ using namespace cs221util;
   // Return the horizontal (or vertical) size of the data block's image region
  int Block::Dimension() const {
    vector<HSLAPixel> currBlock = data.front();
-   return (int)sqrt(currBlock.size());
+   return currBlock.size();
  }
