@@ -15,17 +15,39 @@
 // The fully coloured PNG is returned.
 PNG GridList::Render() const
 {
-  PNG image;
-  // enter your code here
-  return image;
+  Block nwBlock = northwest->data;
+  int dimension = nwBlock.Dimension();
+  PNG* im =  new PNG(dimx * dimension, dimy * dimension);
+
+  GridNode* currNode = northwest;
+  for (int i = 0; i < dimy; i++) {
+    for (int j = 0; j < dimx; j++) {
+      Block currBlock = currNode->data;
+      currBlock.Render(*im, i * dimension, j * dimension);
+      currNode = currNode->next;
+    }
+  }
+
+  return *im;
 }
 
 // Allocates a new GridNode containing bdata and
 //   attaches it to end of this list.
 // Be careful of the special case of inserting into an empty list.
-void GridList::InsertBack(const Block& bdata)
-{
-  // enter your code here
+void GridList::InsertBack(const Block& bdata) {
+  GridNode* newNode = new GridNode(bdata);
+  if (northwest == NULL) {
+    northwest = newNode;
+    southeast = newNode;
+    newNode->prev = NULL;
+    newNode->next = NULL;
+  } else {
+    GridNode* prevNode = southeast;
+    southeast->next = newNode;
+    newNode->prev = southeast;
+    newNode->next = NULL;
+    southeast = newNode;
+  }
 }
 
 // if this list has an odd number of column blocks, then the right side will have more blocks
