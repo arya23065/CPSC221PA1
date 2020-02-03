@@ -26,7 +26,7 @@ TEST_CASE("Block::Build-Dimension full PNG", "[weight=1][part=block]") {
   p->h = 180; p->s = 1.0; p->l = 0.5;
   p = img.getPixel(1, 1);
   p->h = 270; p->s = 1.0; p->l = 0.5;
-  
+
   Block b;
   b.Build(img, 0, 0, 2);
 
