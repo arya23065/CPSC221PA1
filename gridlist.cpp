@@ -194,7 +194,7 @@ void GridList::CheckerSwap(GridList& otherlist)
             }
           }
         }
-        if (currNodeThis->next != NULL) {
+        if (currNodeThis->next != NULL && currNodeOther->next != NULL) {
           currNodeThis = currNodeThis->next;
           currNodeOther = currNodeOther->next;
         }
@@ -229,12 +229,35 @@ void GridList::CheckerN()
 void GridList::Clear()
 {
   // enter your code here
+  if (Length() == 1) {
+    delete(northwest);
+    northwest = NULL;
+    southeast = NULL;
+  }
+  else {
+    if (!IsEmpty()) {
+      GridNode* after = northwest->next;
+      delete(northwest);
+      northwest = after;
+      after->prev = NULL;
+      Clear();
+    }
+  }
 }
 
 // Allocates new nodes into this list as copies of all nodes from otherlist
 void GridList::Copy(const GridList& otherlist)
 {
   // enter your code here
+  if (!otherlist.IsEmpty()) {
+    GridNode* otherCurr = otherlist.northwest;
+
+    for (int i = 0; i < otherlist.Length() - 1; i++) {
+      InsertBack(otherCurr->data);
+      otherCurr = otherCurr->next;
+    }
+    InsertBack(otherCurr->data);
+  }
 }
 
 // IMPLEMENT ANY PRIVATE FUNCTIONS YOU HAVE ADDED BELOW
