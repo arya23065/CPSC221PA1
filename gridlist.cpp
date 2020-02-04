@@ -62,8 +62,10 @@ void GridList::InsertBack(const Block& bdata) {
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_H(GridList& inner)
 {
-  if (dimy == inner.dimy && dimy >= 2 && inner.dimy >= 1) {
-    GridNode* curr = northwest;
+  GridNode* curr = northwest;
+  GridNode* other = inner.northwest;
+  if (curr->data.Dimension() == other->data.Dimension() && dimy == inner.dimy && dimy >= 2 && inner.dimy >= 1) {
+    curr = northwest;
     GridNode* inNextRow = inner.northwest;
     GridNode* inCurr = inner.northwest;
     int midx = dimx / 2;
@@ -113,8 +115,10 @@ void GridList::Sandwich_H(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_V(GridList& inner)
 {
-  if (dimx == inner.dimx && dimx >= 2 && inner.dimx >= 1) {
-    GridNode* curr = northwest;
+  GridNode* curr = northwest;
+  GridNode* other = inner.northwest;
+  if (curr->data.Dimension() == other->data.Dimension() && dimx == inner.dimx && dimx >= 2 && inner.dimx >= 1) {
+    curr = northwest;
     int midy = dimy / 2;
 
     for (int i = 0; i < dimy; i++) {
@@ -149,8 +153,14 @@ void GridList::Sandwich_V(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::CheckerSwap(GridList& otherlist)
 {
-  CheckerSwapHelper(otherlist);
-  otherlist.CheckerSwapHelper(*this);
+  GridNode* curr = northwest;
+  GridNode* other = otherlist.northwest;
+
+  //still gotta check for same pixel dimension
+  if (curr->data.Dimension() == other->data.Dimension() && dimx == otherlist.dimx && dimy == otherlist.dimy) {
+    CheckerSwapHelper(otherlist);
+    otherlist.CheckerSwapHelper(*this);
+  }
 }
 
 void GridList::CheckerSwapHelper(GridList& otherlist)
