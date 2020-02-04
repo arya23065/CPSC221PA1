@@ -62,8 +62,41 @@ void GridList::InsertBack(const Block& bdata) {
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_H(GridList& inner)
 {
-  // enter your code here
+  GridNode* curr = northwest;
+  GridNode* inNextRow = inner.northwest;
+  GridNode* inCurr = inner.northwest;
+  int midx = dimx / 2;
+
+  for (int i = 0; i < dimy; i++) {
+    for (int j = 0; j < dimx; j++) {
+        if (j == midx - 1) {
+          inCurr = inNextRow;
+          GridNode* after = curr->next;
+          curr->next = inCurr;
+          inCurr->prev = curr;
+          for (int k = 0; k < inner.dimx - 1; k++) {
+            inCurr = inCurr->next;
+          }
+          inNextRow = inCurr->next;
+          inCurr->next = after;
+          after->prev = inCurr;
+          curr = inCurr;
+        }
+        curr = curr->next;
+    }
+  }
+
+  dimx += inner.dimx;
+  inner.northwest = NULL;
+  inner.southeast = NULL;
+  // inner.northwest->next = NULL;
+  // inner.southeast->prev = NULL;
+  inner.dimx = 0;
+  inner.dimy = 0;
+
 }
+
+
 
 // inner list must have the same horizontal resolution, horizontal block dimension, and block size
 // if this list has an odd number of row blocks, then the bottom side will have more blocks
@@ -78,7 +111,31 @@ void GridList::Sandwich_H(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_V(GridList& inner)
 {
-  // enter your code here
+  GridNode* curr = northwest;
+  int midy = dimy / 2;
+
+  for (int i = 0; i < dimy; i++) {
+    for (int j = 0; j < dimx; j++) {
+      curr = curr->next;
+    }
+    if (i == midy - 1) {
+      GridNode* after = curr;
+      curr = curr->prev;
+      curr->next = inner.northwest;
+      inner.northwest->prev = curr;
+      inner.southeast->next = after;
+      after->prev = inner.southeast;
+
+    }
+  }
+  dimy += inner.dimy;
+  inner.northwest = NULL;
+  inner.southeast = NULL;
+  // inner.northwest->next = NULL;
+  // inner.southeast->prev = NULL;
+  inner.dimx = 0;
+  inner.dimy = 0;
+
 }
 
 
@@ -89,7 +146,36 @@ void GridList::Sandwich_V(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::CheckerSwap(GridList& otherlist)
 {
-  // enter your code here
+  GridNode* currNodeThis = northwest;
+  GridNode* currNodeOther = otherlist.northwest;
+
+  for (int i = 0; i < dimy; i++) {
+    GridNode* before = northwest;
+    for (int j = 0; j < dimx; j++) {
+      if (i % 2 == 0) {
+        if (j % 2 == 1) {
+          before = currNodeThis->prev;
+          currNodeOther->prev = before;
+          currNodeOther->next = currNodeThis->next;
+          before->next = currNodeOther;
+          currNodeThis = currNodeOther;
+          if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeOther;
+
+        }
+      } else {
+        if (j % 2 == 0) {
+          before = currNodeThis->prev;
+          currNodeOther->prev = before;
+          currNodeOther->next = currNodeThis->next;
+          before->next = currNodeOther;
+          currNodeThis = currNodeOther;
+          if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeOther;
+        }
+      }
+      currNodeThis = currNodeThis->next;
+      currNodeOther = currNodeOther->next;
+    }
+  }
 }
 
 // POST: this list has the negative effect applied selectively to GridNodes to form
