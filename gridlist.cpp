@@ -167,18 +167,16 @@ void GridList::CheckerSwap(GridList& otherlist)
       for (int j = 0; j < dimx; j++) {
         if (i % 2 == 0) {
           if (j % 2 == 1) {
-            if (currNodeOther->next != NULL && currNodeOther->next != NULL) {
-              otherAfter = currNodeOther->next;
-              before = currNodeThis->prev;
-              currNodeOther->prev->next = currNodeThis;
-              currNodeThis->prev = currNodeOther->prev;
-              currNodeOther->prev = before;
-              currNodeThis->next->prev = currNodeOther;
-              currNodeOther->next = currNodeThis->next;
-              currNodeThis->next = otherAfter;
-              before->next = currNodeOther;
-              currNodeThis->next->prev = currNodeThis;
-            }
+            otherAfter = currNodeOther->next;
+            before = currNodeThis->prev;
+            currNodeOther->prev->next = currNodeThis;
+            currNodeThis->prev = currNodeOther->prev;
+            currNodeOther->prev = before;
+            if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeOther;
+            if (currNodeOther->next != NULL) currNodeOther->next = currNodeThis->next;
+            if (currNodeThis->next != NULL) currNodeThis->next = otherAfter;
+            before->next = currNodeOther;
+            if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeThis;
           }
         } else {
           if (j % 2 == 0) {
@@ -188,11 +186,11 @@ void GridList::CheckerSwap(GridList& otherlist)
               currNodeOther->prev->next = currNodeThis;
               currNodeThis->prev = currNodeOther->prev;
               currNodeOther->prev = before;
-              currNodeThis->next->prev = currNodeOther;
-              currNodeOther->next = currNodeThis->next;
-              currNodeThis->next = otherAfter;
+              if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeOther;
+              if (currNodeOther->next != NULL) currNodeOther->next = currNodeThis->next;
+              if (currNodeThis->next != NULL) currNodeThis->next = otherAfter;
               before->next = currNodeOther;
-              currNodeThis->next->prev = currNodeThis;
+              if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeThis;
             }
           }
         }
