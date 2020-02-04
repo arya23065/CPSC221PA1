@@ -41,6 +41,7 @@ class GridList {
     // GridList private member functions
     void Clear();
     void Copy(const GridList& otherlist);
+    void CheckerSwapHelper(GridList& otherlist);
 
     // YOU MAY ADD YOUR OWN PRIVATE MEMBER FUNCTION DEFINITIONS HERE
     //

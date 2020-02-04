@@ -62,38 +62,40 @@ void GridList::InsertBack(const Block& bdata) {
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_H(GridList& inner)
 {
-  GridNode* curr = northwest;
-  GridNode* inNextRow = inner.northwest;
-  GridNode* inCurr = inner.northwest;
-  int midx = dimx / 2;
+  if (dimy == inner.dimy && dimy >= 2 && inner.dimy >=1) {
+    GridNode* curr = northwest;
+    GridNode* inNextRow = inner.northwest;
+    GridNode* inCurr = inner.northwest;
+    int midx = dimx / 2;
 
-  for (int i = 0; i < dimy; i++) {
-    for (int j = 0; j < dimx; j++) {
-        if (j == midx - 1) {
-          inCurr = inNextRow;
-          GridNode* after = curr->next;
-          curr->next = inCurr;
-          inCurr->prev = curr;
-          for (int k = 0; k < inner.dimx - 1; k++) {
-            inCurr = inCurr->next;
+    for (int i = 0; i < dimy; i++) {
+      for (int j = 0; j < dimx; j++) {
+          if (j == midx - 1) {
+            inCurr = inNextRow;
+            GridNode* after = curr->next;
+            curr->next = inCurr;
+            inCurr->prev = curr;
+            for (int k = 0; k < inner.dimx - 1; k++) {
+              inCurr = inCurr->next;
+            }
+            inNextRow = inCurr->next;
+            inCurr->next = after;
+            after->prev = inCurr;
+            curr = inCurr;
           }
-          inNextRow = inCurr->next;
-          inCurr->next = after;
-          after->prev = inCurr;
-          curr = inCurr;
-        }
-        curr = curr->next;
+          curr = curr->next;
+      }
     }
+
+    dimx += inner.dimx;
+    inner.northwest = NULL;
+    inner.southeast = NULL;
+    // inner.northwest->next = NULL;
+    // inner.southeast->prev = NULL;
+    inner.dimx = 0;
+    inner.dimy = 0;
+
   }
-
-  dimx += inner.dimx;
-  inner.northwest = NULL;
-  inner.southeast = NULL;
-  // inner.northwest->next = NULL;
-  // inner.southeast->prev = NULL;
-  inner.dimx = 0;
-  inner.dimy = 0;
-
 }
 
 
@@ -146,6 +148,12 @@ void GridList::Sandwich_V(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::CheckerSwap(GridList& otherlist)
 {
+  CheckerSwapHelper(otherlist);
+  otherlist.CheckerSwapHelper(*this);
+}
+
+void GridList::CheckerSwapHelper(GridList& otherlist)
+{
   GridNode* currNodeThis = northwest;
   GridNode* currNodeOther = otherlist.northwest;
 
@@ -160,7 +168,6 @@ void GridList::CheckerSwap(GridList& otherlist)
           before->next = currNodeOther;
           currNodeThis = currNodeOther;
           if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeOther;
-
         }
       } else {
         if (j % 2 == 0) {
