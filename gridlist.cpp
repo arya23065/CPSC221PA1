@@ -160,38 +160,40 @@ void GridList::CheckerSwap(GridList& otherlist)
     GridNode* currNodeThis = northwest;
     GridNode* currNodeOther = otherlist.northwest;
     GridNode* otherAfter = otherlist.northwest;
+    GridNode* after = otherlist.northwest;
+    GridNode* before = northwest;
 
     for (int i = 0; i < dimy; i++) {
-      GridNode* before = northwest;
       for (int j = 0; j < dimx; j++) {
         if (i % 2 == 0) {
           if (j % 2 == 1) {
-            otherAfter = currNodeOther->next;
-            before = currNodeThis->prev;
-            currNodeOther->prev->next = currNodeThis;
-            currNodeThis->prev = currNodeOther->prev;
-            currNodeOther->prev = before;
-            // SEG FAULT AT THIS LINE I HAVE NO CLUE WHY
-            // currNodeThis->next->prev = currNodeOther;
-            currNodeOther->next = currNodeThis->next;
-            currNodeThis->next = otherAfter;
-            before->next = currNodeOther;
-            if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeThis;
-
+            if (currNodeOther->next != NULL && currNodeOther->next != NULL) {
+              otherAfter = currNodeOther->next;
+              before = currNodeThis->prev;
+              currNodeOther->prev->next = currNodeThis;
+              currNodeThis->prev = currNodeOther->prev;
+              currNodeOther->prev = before;
+              currNodeThis->next->prev = currNodeOther;
+              currNodeOther->next = currNodeThis->next;
+              currNodeThis->next = otherAfter;
+              before->next = currNodeOther;
+              currNodeThis->next->prev = currNodeThis;
+            }
           }
         } else {
           if (j % 2 == 0) {
-            otherAfter = currNodeOther->next;
-            before = currNodeThis->prev;
-            currNodeOther->prev->next = currNodeThis;
-            // currNodeThis->prev = currNodeOther->prev;
-            currNodeOther->prev = before;
-            currNodeThis->next->prev = currNodeOther;
-            currNodeOther->next = currNodeThis->next;
-            currNodeThis->next = otherAfter;
-            before->next = currNodeOther;
-            if (currNodeThis->next != NULL) currNodeThis->next->prev = currNodeThis;
-
+            if (currNodeOther->next != NULL && currNodeOther->next != NULL) {
+              otherAfter = currNodeOther->next;
+              before = currNodeThis->prev;
+              currNodeOther->prev->next = currNodeThis;
+              currNodeThis->prev = currNodeOther->prev;
+              currNodeOther->prev = before;
+              currNodeThis->next->prev = currNodeOther;
+              currNodeOther->next = currNodeThis->next;
+              currNodeThis->next = otherAfter;
+              before->next = currNodeOther;
+              currNodeThis->next->prev = currNodeThis;
+            }
           }
         }
         if (currNodeThis->next != NULL) {
