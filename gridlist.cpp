@@ -62,7 +62,7 @@ void GridList::InsertBack(const Block& bdata) {
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_H(GridList& inner)
 {
-  if (dimy == inner.dimy && dimy >= 2 && inner.dimy >=1) {
+  if (dimy == inner.dimy && dimy >= 2 && inner.dimy >= 1) {
     GridNode* curr = northwest;
     GridNode* inNextRow = inner.northwest;
     GridNode* inCurr = inner.northwest;
@@ -113,31 +113,32 @@ void GridList::Sandwich_H(GridList& inner)
 // DO NOT ALLOCATE OR DELETE ANY NODES IN THIS FUNCTION.
 void GridList::Sandwich_V(GridList& inner)
 {
-  GridNode* curr = northwest;
-  int midy = dimy / 2;
+  if (dimx == inner.dimx && dimx >= 2 && inner.dimx >= 1) {
+    GridNode* curr = northwest;
+    int midy = dimy / 2;
 
-  for (int i = 0; i < dimy; i++) {
-    for (int j = 0; j < dimx; j++) {
-      curr = curr->next;
-    }
-    if (i == midy - 1) {
-      GridNode* after = curr;
-      curr = curr->prev;
-      curr->next = inner.northwest;
-      inner.northwest->prev = curr;
-      inner.southeast->next = after;
-      after->prev = inner.southeast;
+    for (int i = 0; i < dimy; i++) {
+      for (int j = 0; j < dimx; j++) {
+        curr = curr->next;
+      }
+      if (i == midy - 1) {
+        GridNode* after = curr;
+        curr = curr->prev;
+        curr->next = inner.northwest;
+        inner.northwest->prev = curr;
+        inner.southeast->next = after;
+        after->prev = inner.southeast;
 
+      }
     }
+    dimy += inner.dimy;
+    inner.northwest = NULL;
+    inner.southeast = NULL;
+    // inner.northwest->next = NULL;
+    // inner.southeast->prev = NULL;
+    inner.dimx = 0;
+    inner.dimy = 0;
   }
-  dimy += inner.dimy;
-  inner.northwest = NULL;
-  inner.southeast = NULL;
-  // inner.northwest->next = NULL;
-  // inner.southeast->prev = NULL;
-  inner.dimx = 0;
-  inner.dimy = 0;
-
 }
 
 
